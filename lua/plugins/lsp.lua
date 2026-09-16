@@ -64,6 +64,26 @@ return {
   },
 
   {
+    "SmiteshP/nvim-navic",
+    lazy = false,
+    init = function()
+      vim.g.navic_silence = true
+    end,
+    opts = {
+      highlight = true,
+      separator = "  ",
+      depth_limit = 5,
+      safe_output = true,
+      lsp = {
+        auto_attach = true,
+      },
+    },
+    config = function(_, opts)
+      require("nvim-navic").setup(opts)
+    end,
+  },
+
+  {
     "hrsh7th/nvim-cmp",
     event = "InsertEnter",
     dependencies = {

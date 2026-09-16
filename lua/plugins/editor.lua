@@ -94,6 +94,32 @@ return {
         virt_text_pos = "eol",
         ignore_whitespace = false,
       },
+      on_attach = function(bufnr)
+        local gs = package.loaded.gitsigns
+        local function map(mode, l, r, opts)
+          opts = opts or {}
+          opts.buffer = bufnr
+          vim.keymap.set(mode, l, r, opts)
+        end
+        map("n", "]c", function()
+          if vim.wo.diff then return "]c" end
+          vim.schedule(function() gs.next_hunk() end)
+        end, { desc = "Next hunk" })
+        map("n", "[c", function()
+          if vim.wo.diff then return "[c" end
+          vim.schedule(function() gs.prev_hunk() end)
+        end, { desc = "Prev hunk" })
+        map("n", "<leader>hs", gs.stage_hunk, { desc = "Stage hunk" })
+        map("n", "<leader>hr", gs.reset_hunk, { desc = "Reset hunk" })
+        map("v", "<leader>hs", function() gs.stage_hunk({ vim.fn.line("."), vim.fn.line("v") }) end, { desc = "Stage hunk" })
+        map("n", "<leader>hS", gs.stage_buffer, { desc = "Stage buffer" })
+        map("n", "<leader>hu", gs.undo_stage_hunk, { desc = "Undo stage hunk" })
+        map("n", "<leader>hp", gs.preview_hunk, { desc = "Preview hunk" })
+        map("n", "<leader>hb", function() gs.blame_line({ full = true }) end, { desc = "Blame line" })
+        map("n", "<leader>tb", gs.toggle_current_line_blame, { desc = "Toggle blame" })
+        map("n", "<leader>hd", gs.diffthis, { desc = "Diff this" })
+        map("n", "<leader>td", gs.toggle_deleted, { desc = "Toggle deleted" })
+      end,
     },
   },
 
@@ -230,5 +256,67 @@ return {
       hl(0, "MultiCursorDisabledVisual", { link = "Visual" })
       hl(0, "MultiCursorDisabledSign", { link = "SignColumn" })
     end,
+  },
+
+  {
+    "stevearc/conform.nvim",
+    event = { "BufReadPre", "BufNewFile" },
+    keys = {
+      { "<leader>cf", function() require("conform").format({ async = true }) end, desc = "Format file" },
+    },
+    opts = {
+      formatters_by_ft = {
+        lua = { "stylua" },
+        python = { "black" },
+        rust = { "rustfmt" },
+        c = { "clang_format" },
+        cpp = { "clang_format" },
+        sh = { "shfmt" },
+        bash = { "shfmt" },
+        zsh = { "shfmt" },
+        javascript = { "prettier" },
+        typescript = { "prettier" },
+        javascriptreact = { "prettier" },
+        typescriptreact = { "prettier" },
+        html = { "prettier" },
+        css = { "prettier" },
+        json = { "prettier" },
+        yaml = { "prettier" },
+        markdown = { "prettier" },
+        nix = { "nixfmt" },
+        go = { "gofmt" },
+      },
+      format_on_save = {
+        timeout_ms = 500,
+        lsp_format = "fallback",
+      },
+    },
+  },
+
+  {
+    "kylechui/nvim-surround",
+    version = "*",
+    event = "VeryLazy",
+    opts = {},
+  },
+
+  {
+    "rmagatti/auto-session",
+    lazy = false,
+    opts = {
+      suppressed_dirs = { "~/", "~/Downloads", "~/Documents", "~/Desktop", "/" },
+    },
+  },
+
+  {
+    "NeogitOrg/neogit",
+    dependencies = {
+      "nvim-lua/plenary.nvim",
+      "sindrets/diffview.nvim",
+    },
+    keys = {
+      { "<leader>gg", function() require("neogit").open() end, desc = "Git (neogit)" },
+    },
+    opts = {},
   },
 }

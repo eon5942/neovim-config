@@ -39,4 +39,14 @@ opt.colorcolumn = "80"
 opt.conceallevel = 2
 opt.sidescrolloff = 8
 
+-- VS Code-style breadcrumbs (populated by nvim-navic once an LSP attaches)
+_G.navic_location = function()
+  local ok, navic = pcall(require, "nvim-navic")
+  if not ok or not navic.is_available() then
+    return ""
+  end
+  return navic.get_location()
+end
+opt.winbar = "%{%v:lua.navic_location()%}"
+
 vim.opt.shortmess:append({ W = true, I = true, c = true, C = true })
