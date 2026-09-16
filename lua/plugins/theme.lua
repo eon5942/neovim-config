@@ -1,19 +1,21 @@
 return {
   {
-    "scottmckendry/cyberdream.nvim",
+    "Mofiqul/vscode.nvim",
     lazy = false,
     priority = 1000,
     opts = {
+      style = "dark",
       transparent = false,
-      italic_comments = true,
-      accent = "red",
-      variant = "default",
-      borderless_pickers = true,
-      terminal_colors = true,
+      italic_comments = false,
+      disable_nvimtree_bg = true,
+      group_overrides = {
+        StatusLine = { fg = "#ffffff", bg = "#007acc" },
+        StatusLineNC = { fg = "#ffffff", bg = "#005a9e" },
+      },
     },
     config = function(_, opts)
-      require("cyberdream").setup(opts)
-      vim.cmd.colorscheme("cyberdream")
+      require("vscode").setup(opts)
+      vim.cmd.colorscheme("vscode")
     end,
   },
 }
