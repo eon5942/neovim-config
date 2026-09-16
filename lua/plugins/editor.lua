@@ -21,8 +21,6 @@ return {
         sorting_strategy = "ascending",
         layout_config = {
           horizontal = { prompt_position = "top", preview_width = 0.55 },
-          width = 0.8,
-          height = 0.8,
         },
         borderchars = { "─", "│", "─", "│", "╭", "╮", "╯", "╰" },
         file_ignore_patterns = { "node_modules", ".git/", "target/", "dist/" },

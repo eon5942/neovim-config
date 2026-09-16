@@ -24,6 +24,7 @@ return {
         "pyright",
         "bashls",
       },
+      automatic_enable = false,
     },
   },
 
@@ -36,49 +37,29 @@ return {
       "hrsh7th/cmp-nvim-lsp",
     },
     config = function()
-      local capabilities = require("cmp_nvim_lsp").default_capabilities()
-      local lspconfig = require("lspconfig")
+      vim.lsp.config("*", {
+        capabilities = require("cmp_nvim_lsp").default_capabilities(),
+      })
 
-      lspconfig.lua_ls.setup({ capabilities = capabilities })
-      lspconfig.rust_analyzer.setup({ capabilities = capabilities })
-      lspconfig.clangd.setup({ capabilities = capabilities })
-      lspconfig.pyright.setup({ capabilities = capabilities })
-      lspconfig.bashls.setup({ capabilities = capabilities })
-
-      vim.keymap.set("n", "gd", vim.lsp.buf.definition, { desc = "Go to definition" })
-      vim.keymap.set("n", "K", vim.lsp.buf.hover, { desc = "Hover" })
-      vim.keymap.set("n", "gr", vim.lsp.buf.references, { desc = "References" })
-      vim.keymap.set("n", "gi", vim.lsp.buf.implementation, { desc = "Implementation" })
-      vim.keymap.set("n", "<leader>rn", vim.lsp.buf.rename, { desc = "Rename" })
-      vim.keymap.set("n", "<leader>ca", vim.lsp.buf.code_action, { desc = "Code action" })
-      vim.keymap.set("n", "<leader>D", vim.lsp.buf.declaration, { desc = "Go to declaration" })
-      vim.keymap.set("n", "<leader>td", vim.lsp.buf.type_definition, { desc = "Type definition" })
+      vim.lsp.enable("lua_ls")
+      vim.lsp.enable("rust_analyzer")
+      vim.lsp.enable("clangd")
+      vim.lsp.enable("pyright")
+      vim.lsp.enable("bashls")
 
       vim.api.nvim_create_autocmd("LspAttach", {
         callback = function(args)
-          local client = vim.lsp.get_client_by_id(args.data.client_id)
-          if client and client.server_capabilities.documentSymbolProvider then
-            require("nvim-navic").attach(args.buf, client.name)
-          end
+          local map = vim.keymap.set
+          local opts = { buffer = args.buf }
+
+          map("n", "gd", vim.lsp.buf.definition, vim.tbl_extend("force", opts, { desc = "Go to definition" }))
+          map("n", "K", vim.lsp.buf.hover, vim.tbl_extend("force", opts, { desc = "Hover" }))
+          map("n", "gr", vim.lsp.buf.references, vim.tbl_extend("force", opts, { desc = "References" }))
+          map("n", "gi", vim.lsp.buf.implementation, vim.tbl_extend("force", opts, { desc = "Implementation" }))
+          map("n", "<leader>rn", vim.lsp.buf.rename, vim.tbl_extend("force", opts, { desc = "Rename" }))
+          map("n", "<leader>ca", vim.lsp.buf.code_action, vim.tbl_extend("force", opts, { desc = "Code action" }))
         end,
       })
-    end,
-  },
-
-  {
-    "SmiteshP/nvim-navic",
-    lazy = true,
-    init = function()
-      vim.g.navic_silence = true
-    end,
-    opts = {
-      highlight = true,
-      separator = "  ",
-      depth_limit = 5,
-      safe_output = true,
-    },
-    config = function(_, opts)
-      require("nvim-navic").setup(opts)
     end,
   },
 

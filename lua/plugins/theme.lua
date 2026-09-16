@@ -1,21 +1,22 @@
 return {
   {
-    "Mofiqul/vscode.nvim",
+    "rose-pine/neovim",
+    name = "rose-pine",
     lazy = false,
     priority = 1000,
     opts = {
-      style = "dark",
-      transparent = false,
-      italic_comments = false,
-      disable_nvimtree_bg = true,
-      group_overrides = {
-        StatusLine = { fg = "#ffffff", bg = "#007acc" },
-        StatusLineNC = { fg = "#ffffff", bg = "#005a9e" },
+      variant = "main",
+      dark_variant = "main",
+      dim_inactive_windows = true,
+      styles = {
+        bold = true,
+        italic = false,
+        transparency = false,
       },
     },
     config = function(_, opts)
-      require("vscode").setup(opts)
-      vim.cmd.colorscheme("vscode")
+      require("rose-pine").setup(opts)
+      vim.cmd.colorscheme("rose-pine")
     end,
   },
 }
