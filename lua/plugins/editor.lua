@@ -157,6 +157,39 @@ return {
   },
 
   {
+    "CRAG666/code_runner.nvim",
+    keys = {
+      { "<leader>r", "<cmd>RunFile<CR>", desc = "Run code" },
+      { "<leader>rc", "<cmd>RunClose<CR>", desc = "Close runner" },
+    },
+    config = function()
+      require("code_runner").setup({
+        mode = "term",
+        startinsert = true,
+        filetype = {
+          python = "python3 -u $fileName",
+          lua = "lua $fileName",
+          rust = "cd $dir && cargo run",
+          c = "cd $dir && gcc $fileName -o $fileNameWithoutExt && $dir/$fileNameWithoutExt",
+          cpp = "cd $dir && g++ $fileName -o $fileNameWithoutExt && $dir/$fileNameWithoutExt",
+          sh = "bash $fileName",
+          bash = "bash $fileName",
+          zsh = "zsh $fileName",
+          fish = "fish $fileName",
+          javascript = "node $fileName",
+          typescript = "deno run $fileName",
+          javascriptreact = "node $fileName",
+          typescriptreact = "deno run $fileName",
+          go = "go run $fileName",
+          java = "cd $dir && javac $fileName && java $fileNameWithoutExt",
+          ruby = "ruby $fileName",
+          php = "php $fileName",
+        },
+      })
+    end,
+  },
+
+  {
     "jake-stewart/multicursor.nvim",
     branch = "1.0",
     event = "VeryLazy",

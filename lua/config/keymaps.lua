@@ -59,3 +59,19 @@ map("v", "<A-Up>", ":m '<-2<CR>gv=gv", { desc = "Move selection up" })
 map("v", "<A-Down>", ":m '>+1<CR>gv=gv", { desc = "Move selection down" })
 map("i", "<A-Up>", "<Esc>:m .-2<CR>==gi", { desc = "Move line up" })
 map("i", "<A-Down>", "<Esc>:m .+1<CR>==gi", { desc = "Move line down" })
+
+-- Change language (like VS Code "Select Language Mode")
+map("n", "<leader>l", function()
+  local languages = {
+    "python", "rust", "c", "cpp", "lua", "bash", "sh", "zsh", "fish",
+    "javascript", "typescript", "javascriptreact", "typescriptreact",
+    "html", "css", "json", "yaml", "toml", "markdown",
+    "go", "java", "ruby", "php", "zig", "nix", "sql",
+  }
+  vim.ui.select(languages, { prompt = "Language mode:" }, function(ft)
+    if ft then
+      vim.bo.filetype = ft
+      vim.notify("Filetype set to " .. ft, vim.log.levels.INFO)
+    end
+  end)
+end, { desc = "Change language" })
